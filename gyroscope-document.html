@@ -1,0 +1,1432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gyroscope Technology — Quotation / Invoice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     GYROSCOPE TECHNOLOGY (GTi) — Quotation & Invoice template
+     Print-ready. Set the DOC data object at the bottom of the
+     file, then File ▸ Print ▸ Save as PDF (A4, Margins: Default,
+     Background graphics: on). The CSS paginates across pages on its own.
+     ============================================================ */
+
+  :root {
+    /* Uniform near-black text across the whole page, set in Inter — a close,
+       cross-platform match to Apple's San Francisco. Size/weight create the
+       hierarchy; only the hyperlink stays blue. */
+    --navy: #1a1a1a;      /* headings, prices, title     */
+    --blue: #1A56DB;      /* hyperlinks (Click here)     */
+    --teal: #1a1a1a;      /* was accent — now black text */
+    --slate: #1a1a1a;     /* body text                   */
+    --muted: #333333;     /* labels (very slightly softer) */
+    --hairline: #E2E8F0;  /* rules / borders             */
+    --mist: #F5F7FA;      /* zebra / panel background    */
+    --ink: #1a1a1a;       /* body copy                   */
+
+    /* Inter — an open typeface designed as a close match to Apple's San
+       Francisco (SF Pro). It's loaded as a web font (Google Fonts, above), so
+       it renders identically on Windows, macOS, iPhone, Android and in PDF
+       exports. -apple-system falls back to the real SF if Inter fails to load. */
+    --brand-font: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+                  'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #eef1f4;
+    color: var(--ink);
+    font-family: var(--brand-font);
+    font-size: 14px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---- Page sheet (A4) ---- */
+  .sheet {
+    width: 210mm;
+    min-height: auto;
+    margin: 16px auto;
+    background: #fff;
+    padding: 11mm 14mm 9mm;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(10, 37, 64, 0.14);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Faint gyroscope watermark, like the reference */
+  .sheet::before {
+    content: "";
+    position: absolute;
+    right: -60mm;
+    top: 70mm;
+    width: 180mm;
+    height: 180mm;
+    background:
+      radial-gradient(circle at center, rgba(14,116,144,0.05) 0 42%, transparent 43%),
+      repeating-radial-gradient(circle at center, transparent 0 26mm, rgba(14,116,144,0.05) 26mm 26.4mm);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .sheet > * { position: relative; z-index: 1; }
+
+  /* ============ HEADER ============ */
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    /* Subtle blue header band that bleeds to the sheet edges */
+    background: #F5F8FD;
+    margin: -11mm -14mm 0;
+    padding: 11mm 14mm 10mm;
+  }
+
+  .brand-lockup {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .brand-logo {
+    display: block;
+    width: 96mm;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .company-contact {
+    text-align: right;
+    font-family: var(--brand-font);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--slate);
+    line-height: 1.5;
+    min-width: 76mm;
+    white-space: nowrap;
+  }
+  .company-contact .office {
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: 0.03em;
+    font-size: 15.5px;
+    margin-bottom: 4px;
+  }
+  .company-contact a { color: var(--blue); text-decoration: none; }
+  .company-contact .lbl { display: inline-block; width: 40px; color: var(--muted); }
+
+  /* Return-address line above the bill-to block */
+  .return-line {
+    font-size: 10px;
+    color: var(--teal);
+    border-bottom: 0.5px solid var(--hairline);
+    padding-bottom: 3px;
+    margin: 14px 0 8px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ============ ADDRESS + META ROW ============ */
+  .addr-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    /* Divider rule where the return-address line used to be */
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 0.6px solid var(--hairline);
+  }
+  .bill-to { max-width: 84mm; }
+  .bill-to .who { font-weight: 700; color: var(--navy); font-size: 13.5px; }
+  .bill-to .line { color: var(--ink); }
+
+  .doc-contact { font-size: 12px; min-width: 72mm; }
+  .doc-contact .r { display: flex; gap: 8px; }
+  .doc-contact .r .k { width: 92px; color: var(--muted); }
+  .doc-contact .r .v { color: var(--navy); font-weight: 600; }
+  .doc-contact .r .v a { color: var(--teal); text-decoration: none; }
+
+  /* ============ DOC TITLE + META ============ */
+  .doc-title {
+    font-size: 23px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+    margin: 14px 0 9px;
+  }
+  .doc-title .num { color: var(--blue); }
+
+  .meta {
+    font-size: 12px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 1px 12px;
+    max-width: 108mm;
+  }
+  .meta .k { color: var(--muted); }
+  .meta .k::after { content: " :"; }
+  .meta .v { color: var(--navy); }
+  .meta .v.b { font-weight: 700; }
+
+  .lead {
+    margin: 10px 0 4px;
+    font-size: 12px;
+    color: var(--slate);
+  }
+
+  /* ============ LINE ITEMS ============ */
+  table.items {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    font-size: 13px;
+  }
+  table.items thead th {
+    text-align: left;
+    color: var(--navy);
+    font-weight: 700;
+    border-bottom: 1.5px solid var(--navy);
+    padding: 5px 6px 3px;
+    vertical-align: bottom;
+    font-size: 12px;
+  }
+  table.items thead th.num { text-align: right; }
+  table.items thead .cur {
+    display: block;
+    font-weight: 600;
+    color: var(--blue);
+    font-size: 11px;
+  }
+
+  .grp { border-bottom: 0.5px solid var(--hairline); position: relative; }
+  .grp > td { padding: 5px 6px; vertical-align: top; }
+  td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  /* Prices use the original brand font */
+  table.items td.num, table.items thead th.num, table.items thead .cur,
+  .up, .disc, .total-strong, table.totals {
+    font-family: var(--brand-font);
+  }
+  .item-no { font-weight: 700; color: var(--navy); }
+  .part { font-weight: 700; color: var(--navy); }
+  .var { color: var(--muted); padding-left: 10px; font-weight: 500; }
+  .desc-title { font-weight: 700; color: #1a1a1a; margin-top: 1px; font-size: 13px; line-height: 1.4; }
+  .desc { color: #1a1a1a; font-size: 13px; line-height: 1.4; }
+  .desc .em { font-weight: 700; color: #1a1a1a; }
+  .subline { color: #1a1a1a; font-size: 13px; line-height: 1.4; }
+  .disc { color: var(--teal); font-weight: 600; }
+  .total-strong { font-weight: 800; color: var(--blue); }
+
+  /* Two-column label/value spec block, like the CS reference */
+  .spec-box {
+    margin: 5px 0 0;
+    padding: 5px 12px;
+    background: var(--mist);
+    font-size: 12.5px;
+    color: var(--slate);
+    line-height: 1.4;
+  }
+  .spec-box.empty { display: none; }
+  .spec-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 46% 1fr;
+    gap: 0 14px;
+    align-items: baseline;
+  }
+  .spec-row .sk { color: var(--slate); }
+  .spec-row .sv { color: var(--navy); font-weight: 600; }
+  .spec-row .rm-spec { position: absolute; right: -22px; top: -1px; }
+
+  .alt-label {
+    font-style: italic;
+    color: var(--teal);
+    font-size: 11.5px;
+    text-decoration: underline;
+    padding: 6px 6px 0;
+  }
+
+  .link { color: var(--blue); text-decoration: none; font-weight: 600; }
+
+  /* ---- Per-item attachments: datasheet link + image ---- */
+  .attach { margin-top: 8px; }
+  /* Attachment display is anchored to the *row* (not the cell) and pinned from
+     the row's right edge. This keeps image + "Download PDF" under the price
+     columns regardless of how wide the description cell happens to be. */
+  .attach-out {
+    position: absolute;
+    top: 26px;
+    right: 6px;
+    width: 150px;
+    text-align: right;
+    overflow: hidden;
+  }
+  @media (max-width: 900px) {
+    .attach-out { width: 120px; }
+    .item-img { max-height: 72px; max-width: 120px; }
+  }
+  .ds-link {
+    display: none;
+    color: var(--blue);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .ds-link.on { display: block; }
+  .ds-link:hover { text-decoration: underline; }
+  .item-img {
+    display: none;
+    max-height: 92px;
+    max-width: 150px;
+    margin: 0 0 5px auto;
+    object-fit: contain;
+  }
+  .item-img.on { display: block; }
+  .att-editor { display: flex; gap: 7px; align-items: center; margin-top: 5px; }
+  .att-editor .att-label {
+    font-size: 9.5px; font-weight: 700; color: var(--muted);
+    width: 78px; flex: none;
+  }
+  .att-input {
+    font-family: inherit; font-size: 10.5px; color: var(--navy);
+    padding: 3px 8px; border: 1px solid var(--hairline); border-radius: 5px;
+    width: 240px; background: #fff;
+  }
+  .att-input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14,116,144,0.12); }
+  .apply {
+    font-family: inherit; cursor: pointer; font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.03em; border: 0; border-radius: 999px;
+    background: var(--teal); color: #fff; padding: 4px 12px;
+  }
+  .apply:hover { background: #0b5e74; }
+
+  /* ============ TOTALS ============ */
+  .totals-wrap { display: flex; justify-content: flex-end; margin-top: 9px; }
+  table.totals { width: 90mm; border-collapse: collapse; font-size: 12.5px; }
+  table.totals td { padding: 3px 6px; }
+  table.totals td.k { color: var(--slate); }
+  table.totals td.v { text-align: right; font-variant-numeric: tabular-nums; color: var(--navy); }
+  table.totals tr.rule td { border-top: 0.5px solid var(--hairline); }
+  table.totals tr.grand td {
+    border-top: 1.5px solid var(--navy);
+    font-weight: 800;
+    font-size: 15.5px;
+    color: var(--navy);
+    padding-top: 8px;
+  }
+  table.totals tr.grand td.v { color: var(--blue); }
+
+  .terms {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.55;
+    max-width: 130mm;
+  }
+  .terms b { color: var(--navy); font-size: 13px; font-weight: 800; display: block; margin-bottom: 4px; }
+  /* When the terms carry real content, set them off as a distinct section
+     directly below the totals — a separator rule + spacing, not a whole new
+     page (which left a big blank gap). Added by render() via .page-start. */
+  .terms.page-start {
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid var(--hairline);
+  }
+
+  /* ============ FOOTER ============ */
+  .foot {
+    margin-top: 28px;
+    padding-top: 6px;
+    border-top: 0.5px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 10.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .foot .col b { color: var(--navy); display: block; font-size: 11px; font-weight: 800; margin-bottom: 2px; }
+  .foot .col span { color: var(--ink); font-size: 11px; line-height: 1.5; }
+  /* Accreditation badges, in the footer corner where the logo used to sit. */
+  .foot .foot-certs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: center;
+    flex: none;
+  }
+  .foot .foot-certs svg {
+    width: 46px;
+    height: 46px;
+    flex: none;
+    shape-rendering: geometricPrecision;
+    text-rendering: geometricPrecision;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---- Screen-only toolbar ---- */
+  .toolbar {
+    max-width: 210mm;
+    margin: 16px auto 0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-family: inherit;
+  }
+  .toolbar button {
+    background: var(--navy);
+    color: #fff;
+    border: 0;
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .toolbar button.ghost { background: #fff; color: var(--navy); border: 1px solid var(--hairline); }
+  .toolbar button.ghost:hover { background: #f3f6fa; }
+  .toolbar button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .toolbar button.danger { color: #b42318; border-color: #f1c2bd; }
+  .toolbar button.danger:hover:not(:disabled) { background: #fef3f2; }
+  .toolbar .hint { font-size: 11px; color: var(--slate); }
+  .toolbar { flex-wrap: wrap; row-gap: 8px; }
+  /* Grouped toolbar controls, divided by faint separators */
+  .tb-group {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding-left: 10px; margin-left: 2px;
+    border-left: 1px solid var(--hairline);
+  }
+  .tb-label { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+  .tb-select {
+    font-family: inherit; font-size: 11px; font-weight: 600;
+    padding: 8px 10px; border-radius: 999px; border: 1px solid var(--hairline);
+    background: #fff; color: var(--navy); cursor: pointer; max-width: 220px;
+  }
+  .tb-select:hover { background: #f3f6fa; }
+
+  /* ---- Editable fields: subtle affordance on screen, invisible in print ---- */
+  [contenteditable="true"] { outline: none; border-radius: 2px; cursor: text; }
+  @media screen {
+    [contenteditable="true"]:hover  { background: rgba(14,116,144,0.07); box-shadow: 0 0 0 3px rgba(14,116,144,0.07); }
+    [contenteditable="true"]:focus  { background: rgba(14,116,144,0.12); box-shadow: 0 0 0 3px rgba(14,116,144,0.12); }
+  }
+  /* Placeholder text for empty editable fields */
+  [contenteditable][data-ph]:empty::before {
+    content: attr(data-ph);
+    color: #94a3b4;
+    font-weight: 400;
+    font-style: italic;
+    pointer-events: none;
+  }
+
+  /* ---- Add / remove controls (screen only) ---- */
+  .rm, .add { font-family: inherit; cursor: pointer; }
+  .rm {
+    border: 0; background: #ef4444; color: #fff;
+    font-size: 13px; font-weight: 800; line-height: 1;
+    width: 18px; height: 18px; padding: 0; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    vertical-align: middle; box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  }
+  .rm:hover { background: #dc2626; transform: scale(1.1); }
+  .rm-item {
+    position: absolute; left: -26px; top: 5px;
+    width: 20px; height: 20px; font-size: 14px;
+  }
+  .add {
+    display: inline-block; margin-top: 6px;
+    border: 1px dashed var(--hairline); background: #fff; color: var(--teal);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.03em;
+    padding: 3px 10px; border-radius: 999px;
+  }
+  .add:hover { border-color: var(--teal); background: rgba(14,116,144,0.06); }
+  .add-item-wrap { margin-top: 8px; }
+  .subline-row { display: flex; align-items: baseline; gap: 4px; }
+  .subline-row .subline { flex: 1; }
+
+  /* ---- Print pagination: fixed A4 pages built by the paginator ----
+     #printRoot sits off-screen (measurable but invisible) until printing.
+     Each .page is exactly one physical A4 sheet with its own margins, and
+     the paginator only ever places whole blocks inside — so content can
+     never be split across a page boundary. */
+  #printRoot { position: absolute; left: -100000px; top: 0; width: 210mm; }
+  .page {
+    width: 210mm; height: 297mm; padding: 12mm 13mm;
+    box-sizing: border-box; background: #fff; overflow: hidden; position: relative;
+  }
+  .page-body { height: 273mm; overflow: hidden; }
+  /* Neutralise the on-screen header bleed inside a page, and never show
+     placeholder hints in the printed copy. */
+  .page .top { margin: 0 0 6mm !important; padding: 6mm 8mm; }
+  .page [contenteditable][data-ph]:empty::before { content: "" !important; }
+  .page [contenteditable="true"] { background: none !important; box-shadow: none !important; outline: none !important; }
+  .page .terms-block { margin-top: 0; }
+  .page .terms-block + .terms-block { margin-top: 9px; }
+
+  @media print {
+    html, body { background: #fff; }
+    @page { size: A4; margin: 0; }   /* .page padding provides the margins */
+    .no-print { display: none !important; }
+
+    /* Paged mode (JS paginator ran): show the fixed pages, hide the sheet. */
+    body.paged .toolbar,
+    body.paged .sheet { display: none !important; }
+    body.paged #printRoot { position: static; left: 0; width: auto; }
+    body.paged .page { break-after: page; page-break-after: always; }
+    body.paged .page:last-child { break-after: auto; page-break-after: auto; }
+
+    /* Fallback (no JS / paginator failed): print the continuous sheet with
+       margins and best-effort break rules, so printing still works. */
+    body:not(.paged) #printRoot { display: none; }
+    body:not(.paged) .toolbar { display: none; }
+    body:not(.paged) .sheet {
+      width: auto; min-height: auto; margin: 0; padding: 12mm 13mm;
+      box-shadow: none; display: block; overflow: visible;
+    }
+    body:not(.paged) .sheet::before { display: none; }
+    body:not(.paged) [contenteditable][data-ph]:empty::before { content: "" !important; }
+    body:not(.paged) .top { margin: 0 0 6mm; padding: 6mm 8mm; }
+    body:not(.paged) table.items thead { display: table-header-group; }
+    body:not(.paged) tr.grp { break-inside: avoid; page-break-inside: avoid; }
+    body:not(.paged) .addr-row, body:not(.paged) .doc-title,
+    body:not(.paged) .meta, body:not(.paged) .totals-wrap { break-inside: avoid; }
+    body:not(.paged) .foot-certs { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="window.print()" title="Open the print dialog to save a PDF">Print / PDF</button>
+
+  <span class="tb-group">
+    <span class="tb-label">Saved</span>
+    <select id="saveSelect" class="tb-select" onchange="onSelectSave()" title="Load one of your saved documents"></select>
+    <button class="ghost" onclick="saveCurrent()" title="Save changes (Ctrl+S)">Save</button>
+    <button class="ghost" onclick="saveAsNew()" title="Save the current document as a new named copy">Save As…</button>
+    <button id="btnDelete" class="ghost danger" onclick="deleteSelectedSave()" title="Delete the selected save">Delete</button>
+  </span>
+
+  <span class="tb-group">
+    <button class="ghost" onclick="exportData()" title="Download this document's data as a file you can import elsewhere">Export</button>
+    <button class="ghost" onclick="document.getElementById('importFile').click()" title="Load data from an exported file">Import</button>
+    <input type="file" id="importFile" accept="application/json,.json" hidden onchange="importData(this.files[0])">
+    <button class="ghost" onclick="revertToOriginal()" title="Discard the working draft and reload the original (named saves are kept)">Revert</button>
+  </span>
+
+  <span class="tb-group">
+    <button class="ghost" onclick="setDoc('quotation')">Quotation</button>
+    <button class="ghost" onclick="setDoc('invoice')">Invoice</button>
+  </span>
+
+  <span id="saveStatus" class="hint" aria-live="polite"></span>
+</div>
+
+<div class="sheet" id="sheet">
+  <!-- ============ HEADER ============ -->
+  <div class="top">
+    <div class="brand-lockup">
+      <img class="brand-logo" src="https://gyroinst.com/gyroscope-technology-logo-gti-transparent-web.png" alt="Gyroscope Technology — A passion for precision" referrerpolicy="no-referrer">
+    </div>
+
+    <div class="company-contact">
+      <div class="office">GYROSCOPE TECHNOLOGY CO., LTD.</div>
+      <div>555/20 On-Nuch Rd, Prawet</div>
+      <div>Bangkok 10250, Thailand</div>
+      <div><span class="lbl">Tel</span> +66 (02) 328 6721</div>
+      <div><span class="lbl">Mob</span> +66 (081) 468 2897</div>
+      <div><span class="lbl">Mail</span> <a href="mailto:info@gyroinst.com">info@gyroinst.com</a></div>
+      <div><span class="lbl">Web</span> <a href="https://gyroinst.com">www.gyroinst.com</a></div>
+    </div>
+  </div>
+
+  <!-- ============ BILL-TO + DOC CONTACT ============ -->
+  <div class="addr-row">
+    <div class="bill-to" id="billTo"></div>
+    <div class="doc-contact" id="docContact"></div>
+  </div>
+
+  <!-- ============ TITLE + META ============ -->
+  <div class="doc-title" id="docTitle"></div>
+  <div class="meta" id="docMeta"></div>
+
+  <div class="lead" id="docLead"></div>
+
+  <!-- ============ ITEMS ============ -->
+  <table class="items">
+    <thead>
+      <tr>
+        <th style="width:26px">Item</th>
+        <th>Part no. / Var.<br>Description</th>
+        <th class="num" style="width:34px">pcs</th>
+        <th style="width:34px">MU</th>
+        <th class="num" style="width:78px">Unit price</th>
+        <th class="num" style="width:82px">Total price</th>
+      </tr>
+    </thead>
+    <tbody id="itemsBody"></tbody>
+  </table>
+
+  <div class="add-item-wrap no-print">
+    <button type="button" class="add add-item">+ Add line item</button>
+  </div>
+
+  <!-- ============ TOTALS ============ -->
+  <div class="totals-wrap">
+    <table class="totals" id="totals"></table>
+  </div>
+
+  <div class="terms" id="terms"></div>
+
+  <!-- ============ FOOTER ============ -->
+  <div class="foot">
+    <div class="col">
+      <b>Managing Director</b>
+      <span id="ftDirector"></span>
+    </div>
+    <div class="col">
+      <b>Bank</b>
+      <span id="ftBank"></span>
+    </div>
+    <div class="col">
+      <b>Registration</b>
+      <span id="ftReg"></span>
+    </div>
+    <div class="foot-certs" aria-label="Accreditations & traceability">
+      <!-- ISO 9001:2015 — Quality Management -->
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ISO 9001:2015 Quality Certified">
+        <title>ISO 9001:2015 — Quality Management</title>
+        <rect width="100" height="100" rx="12" fill="#FFFFFF" stroke="#0F766E" stroke-width="2"/>
+        <circle cx="50" cy="36" r="22" stroke="#0F766E" stroke-width="1.2"/>
+        <path d="M30 31 C 40 36, 60 36, 70 31" stroke="#0F766E" stroke-width="0.8" fill="none"/>
+        <path d="M30 41 C 40 46, 60 46, 70 41" stroke="#0F766E" stroke-width="0.8" fill="none"/>
+        <path d="M43 15 C 48 22, 48 50, 43 57" stroke="#0F766E" stroke-width="0.8" fill="none"/>
+        <path d="M57 15 C 52 22, 52 50, 57 57" stroke="#0F766E" stroke-width="0.8" fill="none"/>
+        <rect x="32" y="27" width="36" height="14" fill="#FFFFFF" rx="2" stroke="#0F766E" stroke-width="0.5"/>
+        <text x="50" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#0F766E" text-anchor="middle">ISO</text>
+        <text x="50" y="72" font-family="'Inter', sans-serif" font-size="9" font-weight="900" fill="#0F766E" text-anchor="middle" letter-spacing="0.2">9001:2015</text>
+        <text x="50" y="84" font-family="'Inter', sans-serif" font-size="5.5" font-weight="bold" fill="#115E59" text-anchor="middle" letter-spacing="0.4">QUALITY CERTIFIED</text>
+      </svg>
+      <!-- ISO/IEC 17025:2017 — Accredited Laboratory -->
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ISO/IEC 17025 Accredited Laboratory">
+        <title>ISO/IEC 17025:2017 — Accredited Calibration Laboratory</title>
+        <rect width="100" height="100" rx="12" fill="#0A3E7B" stroke="#0A3E7B" stroke-width="2"/>
+        <circle cx="50" cy="38" r="26" stroke="#FFFFFF" stroke-width="0.5" opacity="0.15" fill="none"/>
+        <path d="M26 33 C 36 38, 64 38, 74 33" stroke="#FFFFFF" stroke-width="0.5" opacity="0.15" fill="none"/>
+        <path d="M26 43 C 36 48, 64 48, 74 43" stroke="#FFFFFF" stroke-width="0.5" opacity="0.15" fill="none"/>
+        <text x="50" y="32" font-family="'Inter', sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">ISO</text>
+        <text x="50" y="48" font-family="'Inter', sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">IEC 17025</text>
+        <line x1="15" y1="58" x2="85" y2="58" stroke="#FFFFFF" stroke-width="1" opacity="0.4"/>
+        <text x="50" y="70" font-family="'Inter', sans-serif" font-size="7" font-weight="bold" fill="#F8FAFC" text-anchor="middle" letter-spacing="0.5" opacity="0.95">ACCREDITED</text>
+        <text x="50" y="80" font-family="'Inter', sans-serif" font-size="6.5" font-weight="bold" fill="#F8FAFC" text-anchor="middle" letter-spacing="0.5" opacity="0.95">LABORATORY</text>
+        <text x="50" y="89" font-family="'Inter', sans-serif" font-size="5" fill="#93C5FD" text-anchor="middle" opacity="0.8">CALIBRATION &amp; TEST</text>
+      </svg>
+      <!-- NIST Traceable Calibration -->
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NIST Traceable Calibration">
+        <title>NIST Traceable Calibration</title>
+        <rect width="100" height="100" rx="12" fill="#FFFFFF" stroke="#0284C7" stroke-width="2"/>
+        <rect x="15" y="22" width="70" height="24" fill="#0284C7" rx="3"/>
+        <text x="50" y="38" font-family="'Inter', sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">NIST</text>
+        <text x="50" y="66" font-family="'Inter', sans-serif" font-size="8" font-weight="bold" fill="#0284C7" text-anchor="middle">TRACEABLE</text>
+        <text x="50" y="82" font-family="'Inter', sans-serif" font-size="6.5" fill="#64748B" text-anchor="middle">CALIBRATION</text>
+      </svg>
+      <!-- DAkkS Traceable Standards -->
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DAkkS Traceable Standards">
+        <title>DAkkS Traceable Standards</title>
+        <rect width="100" height="100" rx="12" fill="#1E293B" stroke="#1E293B" stroke-width="2"/>
+        <circle cx="50" cy="50" r="42" stroke="#FFFFFF" stroke-width="0.5" stroke-dasharray="3 3" opacity="0.2"/>
+        <text x="50" y="42" font-family="'Inter', sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">DAkkS</text>
+        <text x="50" y="62" font-family="'Inter', sans-serif" font-size="7.5" font-weight="900" fill="#38BDF8" text-anchor="middle" letter-spacing="0.5">TRACEABLE</text>
+        <text x="50" y="78" font-family="'Inter', sans-serif" font-size="6" fill="#94A3B8" text-anchor="middle">STANDARDS</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Print-only container: the paginator reflows the sheet into fixed A4
+     pages here so nothing is ever split across a page boundary. -->
+<div id="printRoot" aria-hidden="true"></div>
+
+<script>
+/* ============================================================
+   FILL IN YOUR DOCUMENT HERE
+   - Switch docType between 'quotation' and 'invoice'
+   - Everything below renders into the sheet above
+   ============================================================ */
+/* ============================================================
+   BLANK TEMPLATE
+   Everything is empty by default and shows placeholder hints.
+   Just open the file and type into any field. Add or remove
+   line items, detail lines and spec rows with the on-screen
+   controls. Nothing here is fixed.
+   ============================================================ */
+const DOC = {
+  docType: 'quotation',   // 'quotation' | 'invoice' — toggle with the buttons
+  currency: 'THB',        // currency shown in the price columns
+  vatPct: 7,              // VAT / tax rate used for the totals
+
+  // Start with a single blank line item; add more on screen.
+  items: [ {} ],
+};
+
+/* ---------------- helpers ---------------- */
+function money(n, cur) {
+  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + (cur ? ' ' + cur : '');
+}
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+const GYRO_HOST = 'https://gyroinst.com';
+const GYRO_LOGO_URL = GYRO_HOST + '/gyroscope-technology-logo-gti-transparent-web.png';
+const GYRO_ASSET_ALIASES = Object.freeze({
+  'hero-measurement-pi500.png': '/x_flow-meter.png',
+  'hero-technical-ds500.png': '/x_chart-recorder.png',
+  'hero-website-airquality.jpg': '/x_compressed-air-quality.png',
+  'hero-pcb-industrial.jpg': '/x_leak-detection.png',
+  'cs-instruments.png': '/partners/cs-instruments.png',
+  'able-instruments.png': '/partners/able-instruments.png',
+  'hoentzsch.png': '/partners/hoentzsch.png',
+  'gyroscope-technology-logo-gti-transparent-web.png': '/gyroscope-technology-logo-gti-transparent-web.png',
+  'gti-mark.png': '/gti-mark.png?v=2',
+  'x_flow-meter.png': '/x_flow-meter.png',
+  'x_chart-recorder.png': '/x_chart-recorder.png',
+  'x_compressed-air-quality.png': '/x_compressed-air-quality.png',
+  'x_leak-detection.png': '/x_leak-detection.png',
+});
+const GYRO_ASSET_ROOTS = [
+  'able instruments/',
+  'applications/',
+  'cs instruments datasheets/',
+  'cs instruments/',
+  'gyro/',
+  'hero-products/',
+  'hoentzsch/',
+  'partners/',
+  'sensorscientific/',
+  'services/',
+  'suppliers/',
+];
+
+/**
+ * Turn a local workspace path or a root-relative site path into the matching
+ * public gyroinst.com URL. Unrelated third-party URLs stay untouched.
+ */
+function gyroAssetUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw || /^(?:data:|cid:)/i.test(raw)) return raw;
+
+  if (/^https?:\/\/(?:www\.)?gyroinst\.com(?:\/|$)/i.test(raw)) {
+    try {
+      const url = new URL(raw);
+      url.protocol = 'https:';
+      url.hostname = 'gyroinst.com';
+      return url.href;
+    } catch (e) {
+      return raw.replace(/^http:/i, 'https:').replace(/\/\/www\.gyroinst\.com/i, '//gyroinst.com');
+    }
+  }
+  if (/^https?:/i.test(raw)) return raw;
+
+  const path = raw.replace(/\\/g, '/').replace(/^file:\/+/i, '/');
+  const cleanPath = path.split(/[?#]/, 1)[0];
+  const filename = cleanPath.split('/').pop().toLowerCase();
+  if (GYRO_ASSET_ALIASES[filename]) return GYRO_HOST + GYRO_ASSET_ALIASES[filename];
+
+  const deployedPath = cleanPath.match(/(?:^|\/)(?:public|dist)\/(.+)$/i);
+  if (deployedPath) return new URL('/' + deployedPath[1], GYRO_HOST).href;
+
+  const lowerPath = cleanPath.toLowerCase().replace(/^\/+/, '');
+  const rootIndex = GYRO_ASSET_ROOTS
+    .map(root => ({ root, index: lowerPath.lastIndexOf(root) }))
+    .filter(match => match.index >= 0)
+    .sort((a, b) => b.index - a.index)[0];
+  if (rootIndex) {
+    const publicPath = cleanPath.replace(/^\/+/, '').slice(rootIndex.index);
+    return new URL('/' + publicPath, GYRO_HOST).href;
+  }
+
+  return raw;
+}
+
+/** Editable-attribute shorthand, with a placeholder hint. */
+function ce(ph){ return `contenteditable="true" spellcheck="false"${ph ? ` data-ph="${esc(ph)}"` : ''}`; }
+
+/* ---------------- dynamic line-item builders ---------------- */
+function sublineHTML(text = '') {
+  return `<div class="subline-row">`
+    + `<span class="subline" ${ce('Detail line — e.g. part code + description')}>${esc(text)}</span>`
+    + `<button type="button" class="rm rm-line no-print" title="Remove line">&times;</button>`
+    + `</div>`;
+}
+
+function specHTML(label = '', value = '') {
+  return `<div class="spec-row">`
+    + `<span class="sk" ${ce('Label')}>${esc(label)}</span>`
+    + `<span class="sv" ${ce('value')}>${esc(value)}</span>`
+    + `<button type="button" class="rm rm-spec no-print" title="Remove spec">&times;</button>`
+    + `</div>`;
+}
+
+function itemHTML(it = {}) {
+  const subs = (it.sublines && it.sublines.length ? it.sublines : ['']).map(sublineHTML).join('');
+  const specs = (it.spec && it.spec.length ? it.spec : []).map(([k, v]) => specHTML(k, v)).join('');
+  return `
+    <tr class="grp">
+      <td class="item-no">
+        <button type="button" class="rm rm-item no-print" title="Remove line item">&times;</button>
+        <span ${ce('1.0')}>${esc(it.item || '')}</span>
+      </td>
+      <td>
+        <span class="part" ${ce('Part no.')}>${esc(it.partNo || '')}</span><span class="var" ${ce('Var.')}>${esc(it.var || '')}</span>
+        <div class="desc-title" ${ce('Product / item name')}>${it.titleHtml || ''}</div>
+        <div class="desc" ${ce('Short description')}>${it.descHtml || ''}</div>
+        <div class="sublist">${subs}</div>
+        <button type="button" class="add add-line no-print">+ detail line</button>
+        <div class="spec-box${specs ? '' : ' empty'}">${specs}</div>
+        <button type="button" class="add add-spec no-print">+ spec row</button>
+        <div class="attach">
+          <div class="attach-out">
+            <img class="item-img${it.image ? ' on' : ''}" ${it.image ? `src="${esc(it.image)}"` : ''} alt="" referrerpolicy="no-referrer">
+            <a class="ds-link${it.datasheet ? ' on' : ''}" ${it.datasheet ? `href="${esc(it.datasheet)}"` : ''} target="_blank" rel="noopener">Download PDF</a>
+          </div>
+          <div class="att-editor no-print">
+            <span class="att-label">Datasheet PDF</span>
+            <input type="text" class="att-input ds-input" placeholder="Paste PDF link or path…" value="${esc(it.datasheet || '')}">
+            <button type="button" class="apply ds-apply">Apply</button>
+          </div>
+          <div class="att-editor no-print">
+            <span class="att-label">Image</span>
+            <input type="text" class="att-input img-input" placeholder="Paste a gyroinst.com image URL or site asset path…" value="${esc(it.image || '')}">
+            <button type="button" class="apply img-apply">Apply</button>
+          </div>
+        </div>
+      </td>
+      <td class="num pcs" ${ce('1')}>${it.pcs != null ? it.pcs : 1}</td>
+      <td ${ce('PC')}>${esc(it.mu || '')}</td>
+      <td class="num">
+        <span class="up" ${ce('0.00')}>${it.unitPrice != null ? money(it.unitPrice, '') : ''}</span>
+        <div class="disc" ${ce('Disc. %')}>${it.discountPct ? 'Disc. ' + it.discountPct.toFixed(2) + ' %' : ''}</div>
+      </td>
+      <td class="num total-strong">${money(lineTotal(it.unitPrice, it.pcs, it.discountPct), '')}</td>
+    </tr>`;
+}
+
+/** Line total = unit price × quantity, less any percentage discount. */
+function lineTotal(unit, pcs, discPct) {
+  const u = Number(unit) || 0;
+  const q = pcs != null ? Number(pcs) : 1;
+  const d = Number(discPct) || 0;
+  return u * q * (1 - d / 100);
+}
+
+/* ---------------- document numbering ---------------- */
+/* Numbers are generated from today's date as YYYY-MMDD (e.g. 2026-0706). Once
+   generated for a document type it is cached, so re-renders (e.g. toggling
+   Quotation/Invoice) keep the same number. The number stays editable — a
+   manual edit is captured on the next render and preserved. */
+const DOC_NUMS = {};        // { quotation: '2026-0706', invoice: '…' }
+
+function pad(n, w) { return String(n).padStart(w, '0'); }
+
+/** Date-based number: YYYY-MMDD, e.g. "2026-0706". */
+function todayStamp() {
+  const t = new Date();
+  return `${t.getFullYear()}-${pad(t.getMonth() + 1, 2)}${pad(t.getDate(), 2)}`;
+}
+
+/** Human-readable today's date, e.g. "06 Jul 2026". */
+function todayHuman() {
+  const t = new Date();
+  const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${pad(t.getDate(), 2)} ${m[t.getMonth()]} ${t.getFullYear()}`;
+}
+
+/** Auto number for a doc type, generated once then cached. */
+function docNumber(type) {
+  if (!DOC_NUMS[type]) DOC_NUMS[type] = todayStamp();
+  return DOC_NUMS[type];
+}
+
+/* ---------------- renderer ---------------- */
+function render() {
+  const d = DOC, isInv = d.docType === 'invoice';
+  const label = isInv ? 'INVOICE' : 'QUOTATION';
+
+  // Preserve any manual edit to the visible number before we re-render.
+  const prevNumEl = document.querySelector('#docTitle .num');
+  if (prevNumEl) {
+    const shown = prevNumEl.textContent.trim();
+    if (shown) DOC_NUMS[DOC._lastType || d.docType] = shown;
+  }
+  DOC._lastType = d.docType;
+
+  // bill-to
+  document.getElementById('billTo').innerHTML =
+    `<div class="who" ${ce('Customer / company name')}></div>` +
+    `<div class="line" ${ce('Contact person')}></div>` +
+    `<div class="line" ${ce('Street address')}></div>` +
+    `<div class="line" ${ce('City, postal code')}></div>` +
+    `<div class="line" ${ce('Country')}></div>`;
+
+  // doc contact
+  document.getElementById('docContact').innerHTML = `
+    <div class="r"><div class="k">Contact</div><div class="v" ${ce('Name')}></div></div>
+    <div class="r"><div class="k">Telephone</div><div class="v" ${ce('Phone')}></div></div>
+    <div class="r"><div class="k">Email</div><div class="v" ${ce('name@company.com')}></div></div>
+    <div class="r"><div class="k">Techn. officer</div><div class="v" ${ce('Name')}></div></div>`;
+
+  // title + number
+  // Auto-generate a date-based number (e.g. 20260706-0001). Still editable —
+  // click the number to change it; edits are preserved on re-render.
+  const autoNum = docNumber(d.docType);
+  document.getElementById('docTitle').innerHTML = `${label} <span class="num" ${ce('0000-0000')}>${esc(autoNum)}</span>`;
+
+  // meta
+  const meta = [];
+  meta.push(['Page', '1 / 1']);
+  meta.push(['Date', todayHuman()]);
+  meta.push(['Customer No.', '']);
+  if (isInv) {
+    meta.push(['Your PO', '']);
+    meta.push(['Payment terms', '', true]);
+    meta.push(['Due date', '', true]);
+  } else {
+    meta.push(['Shipping', '']);
+    meta.push(['Delivery in', '', true]);
+    meta.push(['Ship via', '']);
+    meta.push(['Valid until', '', true]);
+  }
+  document.getElementById('docMeta').innerHTML = meta.map(([k, v, b]) =>
+    `<div class="k">${esc(k)}</div><div class="v${b ? ' b' : ''}" ${ce('—')}>${esc(v)}</div>`).join('');
+
+  // lead line
+  const lead = document.getElementById('docLead');
+  lead.innerHTML = '';
+  lead.setAttribute('data-ph', isInv
+    ? 'Optional note — e.g. thank you for your order.'
+    : 'Optional note — e.g. thank you for your inquiry.');
+  lead.setAttribute('contenteditable', 'true');
+  lead.setAttribute('spellcheck', 'false');
+
+  // items
+  document.getElementById('itemsBody').innerHTML = d.items.map(itemHTML).join('');
+  renumberItems();
+
+  // totals (recompute so line-item edits flow through)
+  recompute();
+
+  // terms — pre-filled with GTi standard terms (editable)
+  const terms = document.getElementById('terms');
+  terms.innerHTML = '<b>Terms and Conditions</b><br>' +
+    'Payment : 100% Payment in advance.<br>' +
+    'Warranty : Three (3) Years (Hardware &amp; Software) After Installation and completed commissioning';
+  terms.setAttribute('contenteditable', 'true');
+  terms.setAttribute('spellcheck', 'false');
+  terms.classList.add('page-start');
+
+  // footer — pre-filled with GTi's standard details (still editable)
+  const footDefaults = {
+    ftDirector: 'Kammapat<br>Walainaruemit',
+    ftBank: 'UOB Bank, A/C 813-300-489-0<br>Paradise Park Branch, 61#2C004 Paradise Park,<br>Srinakarin Rd, Nongbon, Prawet, BKK 10250',
+    ftReg: 'Tax ID VAT reg.<br>0105542039307',
+  };
+  Object.entries(footDefaults).forEach(([id, html]) => {
+    const el = document.getElementById(id);
+    el.innerHTML = html;
+    el.setAttribute('contenteditable', 'true');
+    el.setAttribute('spellcheck', 'false');
+  });
+
+  document.title = `Gyroscope ${label}`;
+}
+
+/** Parse a formatted money string back into a number. */
+function parseNum(s) { return parseFloat(String(s).replace(/[^0-9.\-]/g, '')) || 0; }
+
+/** Recalculate a single line's total from its unit price × pcs (− discount). */
+function calcRow(row) {
+  const unit = parseNum(row.querySelector('.up')?.textContent);
+  const pcs = parseNum(row.querySelector('.pcs')?.textContent);
+  const disc = parseNum(row.querySelector('.disc')?.textContent);
+  const cell = row.querySelector('.total-strong');
+  if (cell) cell.textContent = money(unit * pcs * (1 - disc / 100), '');
+}
+
+/** Number line items sequentially: 1.0, 2.0, 3.0 … */
+function renumberItems() {
+  document.querySelectorAll('#itemsBody tr.grp td.item-no > span')
+    .forEach((el, i) => { el.textContent = (i + 1) + '.0'; });
+}
+
+/** Recalculate Net / VAT / Total from the (editable) line-item totals. */
+function recompute() {
+  const d = DOC, isInv = d.docType === 'invoice';
+  let net = 0;
+  document.querySelectorAll('#itemsBody tr.grp .total-strong')
+    .forEach(el => { net += parseNum(el.textContent); });
+  const vat = net * (d.vatPct / 100);
+  const grand = net + vat;
+  document.getElementById('totals').innerHTML = `
+    <tr class="rule"><td class="k">Net total</td><td class="v">${money(net, d.currency)}</td></tr>
+    <tr><td class="k">VAT ${d.vatPct}%</td><td class="v">${money(vat, d.currency)}</td></tr>
+    <tr class="grand"><td class="k">${isInv ? 'Amount due' : 'Total incl. VAT'}</td><td class="v">${money(grand, d.currency)}</td></tr>`;
+}
+
+function setDoc(type) { DOC.docType = type; render(); saveWork(); }
+
+/* ============================================================
+   SAVE MANAGER  (browser localStorage — no server needed)
+   - Working draft: autosaved as you type, so a refresh never loses work.
+   - Named saves:  keep as many versions as you like; pick them from the
+                   dropdown, overwrite with Save, add with Save As, remove
+                   with Delete.
+   - Export/Import: move a document's data to another file or machine.
+   ============================================================ */
+const itemsBodyEl = () => document.getElementById('itemsBody');
+const PATH      = location.pathname;
+const WORK_KEY  = 'gti_work_'  + PATH;   // refresh-safe working draft
+const SAVES_KEY = 'gti_saves_' + PATH;   // { id: { name, ts, html } }
+let currentSaveId = null;                // which named save is loaded (if any)
+
+/* ---- small helpers ---- */
+function sheetEl()  { return document.getElementById('sheet'); }
+function normalizeHostedAssets(root = sheetEl()) {
+  const logo = root.querySelector('.brand-logo');
+  if (logo) logo.setAttribute('src', GYRO_LOGO_URL);
+
+  root.querySelectorAll('img[src]').forEach(img => {
+    const hosted = gyroAssetUrl(img.getAttribute('src'));
+    if (hosted) img.setAttribute('src', hosted);
+  });
+
+  root.querySelectorAll('.attach').forEach(wrap => {
+    const img = wrap.querySelector('.item-img');
+    const imgInput = wrap.querySelector('.img-input');
+    const imgSource = imgInput?.value || img?.getAttribute('src') || '';
+    const hostedImage = gyroAssetUrl(imgSource);
+    if (imgInput && hostedImage) imgInput.value = hostedImage;
+    if (img && hostedImage) {
+      img.setAttribute('src', hostedImage);
+      img.classList.add('on');
+    }
+
+    const link = wrap.querySelector('.ds-link');
+    const dsInput = wrap.querySelector('.ds-input');
+    const pdfSource = dsInput?.value || link?.getAttribute('href') || '';
+    const hostedPdf = gyroAssetUrl(pdfSource);
+    if (dsInput && hostedPdf) dsInput.value = hostedPdf;
+    if (link && hostedPdf) {
+      link.setAttribute('href', hostedPdf);
+      link.classList.add('on');
+    }
+  });
+}
+function sheetHTML(){ normalizeHostedAssets(); return sheetEl().innerHTML; }
+function setSheetHTML(html) { sheetEl().innerHTML = html; normalizeHostedAssets(); recompute(); }
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function docLabel() {
+  return (document.querySelector('#docTitle .num')?.textContent || '').trim() || 'Document';
+}
+function flashStatus(msg) {
+  const el = document.getElementById('saveStatus');
+  if (!el) return;
+  el.textContent = msg;
+  clearTimeout(flashStatus._t);
+  flashStatus._t = setTimeout(() => { el.textContent = ''; }, 2500);
+}
+
+/* ---- working draft (autosave) ---- */
+let _workTimer;
+function saveWork() { try { localStorage.setItem(WORK_KEY, sheetHTML()); } catch (e) {} }
+function autosave() { clearTimeout(_workTimer); _workTimer = setTimeout(saveWork, 500); }
+function loadWork() {
+  try { const h = localStorage.getItem(WORK_KEY); if (h) { setSheetHTML(h); return true; } } catch (e) {}
+  return false;
+}
+
+/* ---- named saves ---- */
+function readSaves()  { try { return JSON.parse(localStorage.getItem(SAVES_KEY) || '{}'); } catch (e) { return {}; } }
+function writeSaves(o){ try { localStorage.setItem(SAVES_KEY, JSON.stringify(o)); } catch (e) {} }
+
+function refreshSaveDropdown() {
+  const sel = document.getElementById('saveSelect');
+  if (!sel) return;
+  const saves = readSaves();
+  const ids = Object.keys(saves).sort((a, b) => saves[b].ts - saves[a].ts);
+  sel.innerHTML = '<option value="">— Unsaved draft —</option>'
+    + ids.map(id => `<option value="${id}">${esc(saves[id].name)}</option>`).join('');
+  sel.value = currentSaveId && saves[currentSaveId] ? currentSaveId : '';
+  const del = document.getElementById('btnDelete');
+  if (del) del.disabled = !sel.value;
+}
+
+function saveAsNew() {
+  const saves = readSaves();
+  const name = prompt('Save as — name this document:', docLabel());
+  if (name == null) return;                        // cancelled
+  const id = uid();
+  saves[id] = { name: (name.trim() || docLabel()), ts: Date.now(), html: sheetHTML() };
+  writeSaves(saves);
+  currentSaveId = id;
+  saveWork();
+  refreshSaveDropdown();
+  flashStatus('Saved "' + saves[id].name + '"');
+}
+
+function saveCurrent() {
+  const saves = readSaves();
+  if (currentSaveId && saves[currentSaveId]) {
+    saves[currentSaveId].html = sheetHTML();
+    saves[currentSaveId].ts = Date.now();
+    writeSaves(saves);
+    saveWork();
+    flashStatus('Saved "' + saves[currentSaveId].name + '"');
+  } else {
+    saveAsNew();
+  }
+}
+
+function onSelectSave() {
+  const sel = document.getElementById('saveSelect');
+  const id = sel.value;
+  if (!id) { currentSaveId = null; refreshSaveDropdown(); return; }
+  const saves = readSaves();
+  if (!saves[id]) return;
+  if (!confirm('Load "' + saves[id].name + '"?\nThe current view will be replaced (your other saves are kept).')) {
+    sel.value = currentSaveId || '';
+    return;
+  }
+  currentSaveId = id;
+  setSheetHTML(saves[id].html);
+  saveWork();
+  refreshSaveDropdown();
+  flashStatus('Loaded "' + saves[id].name + '"');
+}
+
+function deleteSelectedSave() {
+  if (!currentSaveId) return;
+  const saves = readSaves();
+  const s = saves[currentSaveId];
+  if (!s) return;
+  if (!confirm('Delete saved document "' + s.name + '"? This cannot be undone.')) return;
+  delete saves[currentSaveId];
+  writeSaves(saves);
+  currentSaveId = null;
+  refreshSaveDropdown();
+  flashStatus('Deleted "' + s.name + '"');
+}
+
+function revertToOriginal() {
+  if (!confirm('Discard the current working draft and reload the original document?\nYour named saves are kept.')) return;
+  try { localStorage.removeItem(WORK_KEY); } catch (e) {}
+  currentSaveId = null;
+  location.reload();
+}
+
+/* ---- export / import (portable JSON) ---- */
+function exportData() {
+  const name = (currentSaveId && readSaves()[currentSaveId]?.name) || docLabel();
+  const payload = { type: 'gyroscope-doc', version: 1, name, savedAt: new Date().toISOString(), html: sheetHTML() };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (name.replace(/[^\w.-]+/g, '_') || 'document') + '.gti.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  flashStatus('Exported');
+}
+
+function importData(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!data || typeof data.html !== 'string') throw new Error('bad file');
+      setSheetHTML(data.html);
+      const saves = readSaves();
+      const id = uid();
+      const name = data.name || file.name.replace(/\.(gti\.)?json$/i, '');
+      saves[id] = { name, ts: Date.now(), html: data.html };
+      writeSaves(saves);
+      currentSaveId = id;
+      saveWork();
+      refreshSaveDropdown();
+      flashStatus('Imported "' + name + '"');
+    } catch (e) {
+      alert('Could not import that file — it is not a valid Gyroscope export.');
+    }
+  };
+  reader.readAsText(file);
+  const inp = document.getElementById('importFile');
+  if (inp) inp.value = '';   // allow re-importing the same file
+}
+
+/* ---------------- boot ---------------- */
+render();
+loadWork();          // restore refresh-safe working draft over the fresh render
+recompute();         // totals reflect the restored line items
+refreshSaveDropdown();
+
+/* ---------------- add / remove interactions ---------------- */
+
+// Live totals + autosave: recalc the edited line, then re-sum the document.
+document.addEventListener('input', (e) => {
+  const row = e.target.closest('tr.grp');
+  if (row && itemsBodyEl() && itemsBodyEl().contains(row)) {
+    calcRow(row);
+    recompute();
+  }
+  if (e.target.closest && e.target.closest('#sheet')) autosave();
+});
+
+// Autosave after any structural change made with the in-sheet buttons.
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('button');
+  if (b && b.closest('#sheet')) setTimeout(saveWork, 60);
+});
+
+// Ctrl/Cmd+S saves the current document.
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+    e.preventDefault();
+    saveCurrent();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+
+  // Add a new blank line item
+  if (btn.classList.contains('add-item')) {
+    itemsBodyEl().insertAdjacentHTML('beforeend', itemHTML());
+    renumberItems();
+    recompute();
+    return;
+  }
+  // Remove a line item
+  if (btn.classList.contains('rm-item')) {
+    btn.closest('tr.grp')?.remove();
+    renumberItems();
+    recompute();
+    return;
+  }
+  // Add a detail line to this item's description
+  if (btn.classList.contains('add-line')) {
+    btn.closest('td').querySelector('.sublist')?.insertAdjacentHTML('beforeend', sublineHTML());
+    return;
+  }
+  // Remove a detail line
+  if (btn.classList.contains('rm-line')) {
+    btn.closest('.subline-row')?.remove();
+    return;
+  }
+  // Add a spec row
+  if (btn.classList.contains('add-spec')) {
+    const box = btn.closest('td').querySelector('.spec-box');
+    box.classList.remove('empty');
+    box.insertAdjacentHTML('beforeend', specHTML());
+    return;
+  }
+  // Remove a spec row
+  if (btn.classList.contains('rm-spec')) {
+    const box = btn.closest('.spec-box');
+    btn.closest('.spec-row')?.remove();
+    if (box && !box.querySelector('.spec-row')) box.classList.add('empty');
+    return;
+  }
+  // Apply a datasheet PDF link -> shows a "Download PDF" link (prints, editor doesn't)
+  if (btn.classList.contains('ds-apply')) {
+    const wrap = btn.closest('.attach');
+    const input = wrap.querySelector('.ds-input');
+    const url = gyroAssetUrl(input.value);
+    input.value = url;
+    const link = wrap.querySelector('.ds-link');
+    if (url) {
+      link.setAttribute('href', url);
+      link.classList.add('on');
+    } else {
+      link.removeAttribute('href');
+      link.classList.remove('on');
+    }
+    return;
+  }
+  // Apply an image link -> shows a thumbnail (prints, editor doesn't)
+  if (btn.classList.contains('img-apply')) {
+    const wrap = btn.closest('.attach');
+    const input = wrap.querySelector('.img-input');
+    const src = gyroAssetUrl(input.value);
+    input.value = src;
+    const img = wrap.querySelector('.item-img');
+    if (src) { img.setAttribute('src', src); img.classList.add('on'); }
+    else { img.removeAttribute('src'); img.classList.remove('on'); }
+    return;
+  }
+});
+
+// Paste as PLAIN TEXT everywhere, so copied content can't drag in stray
+// fonts, sizes or colours that break the layout.
+document.addEventListener('paste', (e) => {
+  const el = e.target;
+  if (el && el.isContentEditable) {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, text);
+  }
+});
+
+// Press Enter inside an attachment field to apply it.
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('att-input')) {
+    e.preventDefault();
+    e.target.closest('.att-editor').querySelector('.apply')?.click();
+  }
+});
+
+/* ============================================================
+   PRINT PAGINATOR — reflow the sheet into fixed A4 pages so no
+   block is ever split across a page boundary. Runs only while
+   printing; the on-screen editing sheet is left untouched.
+   ============================================================ */
+const HEADER_BLOCKS = ['.top', '.addr-row', '.doc-title', '.meta', '.lead'];
+
+function stripControls(node) {
+  node.querySelectorAll('.no-print').forEach(n => n.remove());
+  return node;
+}
+function pgNewPage(root) {
+  const page = document.createElement('div');
+  page.className = 'page';
+  const body = document.createElement('div');
+  body.className = 'page-body';
+  page.appendChild(body);
+  root.appendChild(page);
+  return body;
+}
+function pgFits(body) { return body.scrollHeight <= body.clientHeight + 1; }
+
+/** Split the (possibly long) terms block into per-paragraph blocks. */
+function pgTermsBlocks(termsEl) {
+  const chunks = termsEl.innerHTML.split(/(?:<br\s*\/?>\s*){2,}/i)
+    .map(s => s.trim()).filter(Boolean);
+  return chunks.map(html => {
+    const d = document.createElement('div');
+    d.className = 'terms terms-block';
+    d.innerHTML = html;
+    return d;
+  });
+}
+
+function buildPrintPages() {
+  const src = document.getElementById('sheet');
+  const root = document.getElementById('printRoot');
+  if (!src || !root) return false;
+  root.innerHTML = '';
+  let body = pgNewPage(root);
+
+  // Place a whole block; move it to a fresh page if it doesn't fit.
+  const place = (node) => {
+    body.appendChild(node);
+    if (!pgFits(body) && body.childNodes.length > 1) {
+      body.removeChild(node);
+      body = pgNewPage(root);
+      body.appendChild(node);
+    }
+  };
+
+  // 1) header blocks
+  HEADER_BLOCKS.forEach(sel => {
+    const el = src.querySelector(sel);
+    if (el) place(stripControls(el.cloneNode(true)));
+  });
+
+  // 2) line items — one table per page (column header repeats), rows kept whole
+  const srcTable = src.querySelector('table.items');
+  if (srcTable) {
+    const theadHTML = srcTable.querySelector('thead') ? srcTable.querySelector('thead').outerHTML : '';
+    let table = null, tbody = null;
+    const startTable = () => {
+      table = document.createElement('table');
+      table.className = 'items';
+      table.innerHTML = theadHTML + '<tbody></tbody>';
+      tbody = table.querySelector('tbody');
+      body.appendChild(table);
+    };
+    startTable();
+    src.querySelectorAll('table.items tbody tr.grp').forEach(tr => {
+      const row = stripControls(tr.cloneNode(true));
+      tbody.appendChild(row);
+      if (!pgFits(body) && tbody.children.length > 1) {
+        tbody.removeChild(row);
+        body = pgNewPage(root);
+        startTable();
+        tbody.appendChild(row);
+      }
+    });
+    if (tbody && tbody.children.length === 0 && table) table.remove();
+  }
+
+  // 3) totals
+  const totals = src.querySelector('.totals-wrap');
+  if (totals) place(stripControls(totals.cloneNode(true)));
+
+  // 4) terms (paragraph by paragraph)
+  const terms = src.querySelector('.terms');
+  if (terms && terms.textContent.trim()) {
+    pgTermsBlocks(stripControls(terms.cloneNode(true))).forEach(place);
+  }
+
+  // 5) footer
+  const foot = src.querySelector('.foot');
+  if (foot) place(stripControls(foot.cloneNode(true)));
+
+  return root.children.length > 0;
+}
+
+function preparePrint() {
+  try {
+    if (buildPrintPages()) document.body.classList.add('paged');
+    else document.body.classList.remove('paged');
+  } catch (e) {
+    document.body.classList.remove('paged');   // fall back to continuous sheet
+  }
+}
+function teardownPrint() {
+  document.body.classList.remove('paged');
+  const root = document.getElementById('printRoot');
+  if (root) root.innerHTML = '';
+}
+
+window.addEventListener('beforeprint', preparePrint);
+window.addEventListener('afterprint', teardownPrint);
+// Safari / Firefox path (they may not fire before/afterprint reliably).
+if (window.matchMedia) {
+  const mq = window.matchMedia('print');
+  const onChange = (m) => { if (m.matches) preparePrint(); else teardownPrint(); };
+  if (mq.addEventListener) mq.addEventListener('change', onChange);
+  else if (mq.addListener) mq.addListener(onChange);
+}
+</script>
+</body>
+</html>

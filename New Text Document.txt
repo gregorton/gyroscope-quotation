@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Email</title>
+</head>
+<body style="margin:0;padding:0;background:#eef3fb;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef3fb;">
+    <tr><td align="center" style="padding:24px 12px;">
+      <table role="presentation" width="640" cellpadding="0" cellspacing="0" style="width:640px;max-width:100%;background:#ffffff;border-radius:16px;overflow:hidden;">
+        <tr><td>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff"><tr><td style="padding:24px 28px 20px">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="62%" valign="middle" style="padding-right:18px">
+              <img src="https://gyroinst.com/gyroscope-technology-logo-gti-transparent-web.png" width="300" alt="Gyroscope Technology — A passion for precision" style="display:block;border:0;outline:none;text-decoration:none;width:100%;max-width:300px;height:auto">
+            </td>
+            <td align="right" valign="middle" style="font-family:'Inter', Arial, sans-serif;font-size:12px;line-height:1.6;color:#33414f;white-space:nowrap">
+            <div style="font-weight:700;color:#1A56DB">+66 (02) 328 6721</div>
+            <div><a href="mailto:info@gyroinst.com" style="color:#33414f;text-decoration:none">info@gyroinst.com</a></div>
+            <div><a href="https://www.gyroinst.com" style="color:#1A56DB;text-decoration:none">www.gyroinst.com</a></div>
+          </td>
+          </tr></table>
+        </td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff"><tr><td style="padding:0">
+          <div style="position:relative;background-image:url('https://gyroinst.com/x_leak-detection.png');background-size:cover;background-position:center;min-height:320px">
+            <div style="position:absolute;inset:0;background:rgba(10,15,25,0.46)"></div>
+            <div style="position:relative;padding:56px 32px 56px;text-align:center">
+              <div style="font-family:'Inter', Arial, sans-serif;font-size:12px;font-weight:700;letter-spacing:.18em;color:#ffffff;opacity:.9;margin-bottom:14px">AUTHORISED BRAND PARTNER</div>
+              <div style="font-family:'Inter', Arial, sans-serif;font-weight:800;font-size:34px;line-height:1.1;color:#ffffff;margin:0">Introducing CS Instruments, Höntzsch &amp; ABLE</div>
+              <div style="font-family:'Inter', Arial, sans-serif;font-size:16px;line-height:1.5;color:#ffffff;opacity:.94;margin:14px auto 0;max-width:460px">Gyroscope Technology is your local partner for three trusted names in flow, gas and process measurement — with technical support at every step.</div>
+              <div style="margin-top:26px"><a href="https://gyroinst.com/" target="_blank" style="display:inline-block;font-family:'Inter',Arial,sans-serif;font-weight:700;font-size:16px;color:#ffffff;background:#1A56DB;padding:14px 32px;border-radius:999px;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,0.12)">Talk to our team</a></div>
+            </div>
+          </div>
+        </td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff"><tr><td style="padding:30px 32px 8px"><div style="font-family:'Inter', Arial, sans-serif;font-weight:800;font-size:30px;line-height:1.2;color:#0A2540;text-align:center;margin:0">Precision you trust, supported locally</div></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff"><tr><td style="padding:8px 32px 24px"><div style="font-family:'Inter', Arial, sans-serif;font-size:16px;line-height:1.6;color:#33414f;text-align:center">We represent manufacturers who share our standard for accuracy and reliability. As an authorised distributor for CS Instruments, Höntzsch and ABLE Instruments &amp; Controls, we bring their measurement expertise to your process — backed by hands-on engineering support from our team in Bangkok.</div></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f8fd"><tr><td style="padding:26px 24px 28px"><div style="font-family:'Inter', Arial, sans-serif;font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#7C93AE;text-align:center;margin-bottom:16px">Authorised distributor &amp; brand partner</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" valign="middle" style="padding:8px 16px"><img src="https://gyroinst.com/partners/cs-instruments.png" alt="" style="display:inline-block;border:0;height:34px;max-width:140px;width:auto"></td><td align="center" valign="middle" style="padding:8px 16px"><img src="https://gyroinst.com/partners/hoentzsch.png" alt="" style="display:inline-block;border:0;height:34px;max-width:140px;width:auto"></td><td align="center" valign="middle" style="padding:8px 16px"><img src="https://gyroinst.com/partners/able-instruments.png" alt="" style="display:inline-block;border:0;height:34px;max-width:140px;width:auto"></td></tr></table></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff"><tr><td style="padding:20px 24px 20px">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td width="46%" valign="top" style="padding:0 10px"><img src="https://gyroinst.com/x_chart-recorder.png" alt="" style="display:block;border:0;width:100%;height:auto;border-radius:12px"></td><td width="54%" valign="middle" style="padding:0 10px">
+            <div style="font-family:'Inter', Arial, sans-serif;font-weight:700;font-size:20px;color:#0A2540;margin:0 0 8px">CS Instruments — compressed air &amp; gas</div>
+            <div style="font-family:'Inter', Arial, sans-serif;font-size:15px;line-height:1.6;color:#33414f">Flow, dew point, pressure and consumption measurement for compressed air and industrial gases, from portable meters to fixed monitoring.</div>
+            <div style="margin-top:12px"><a href="#" style="font-family:'Inter', Arial, sans-serif;font-weight:700;font-size:14px;color:#1A56DB;text-decoration:none">View CS Instruments range →</a></div>
+          </td></tr></table>
+        </td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff"><tr><td style="padding:20px 24px 20px">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td width="54%" valign="middle" style="padding:0 10px">
+            <div style="font-family:'Inter', Arial, sans-serif;font-weight:700;font-size:20px;color:#0A2540;margin:0 0 8px">Höntzsch — gas &amp; air flow</div>
+            <div style="font-family:'Inter', Arial, sans-serif;font-size:15px;line-height:1.6;color:#33414f">Vane-wheel and vortex flow sensors for measuring gas and air velocity, including ATEX versions for hazardous areas.</div>
+            <div style="margin-top:12px"><a href="#" style="font-family:'Inter', Arial, sans-serif;font-weight:700;font-size:14px;color:#1A56DB;text-decoration:none">Explore Höntzsch sensors →</a></div>
+          </td><td width="46%" valign="top" style="padding:0 10px"><img src="https://gyroinst.com/hoentzsch/261.png" alt="" style="display:block;border:0;width:100%;height:auto;border-radius:12px"></td></tr></table>
+        </td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff"><tr><td style="padding:8px 32px 30px"><div style="text-align:center"><a href="https://gyroinst.com/" target="_blank" style="display:inline-block;font-family:'Inter', Arial, sans-serif;font-weight:700;font-size:16px;color:#ffffff;background:#1A56DB;padding:14px 32px;border-radius:999px;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,0.12)">Request a consultation</a></div></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff"><tr><td style="padding:8px 32px 8px"><div style="border-top:1px solid #e6e2da;width:100%;margin:0 auto"></div></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f6f2"><tr><td style="padding:26px 32px 30px"><div style="text-align:center;font-family:'Inter', Arial, sans-serif;font-size:12.5px;line-height:1.6;color:#8b93a1">
+          <div style="font-weight:700;color:#8b93a1">GYROSCOPE TECHNOLOGY CO., LTD.</div>
+          <div>555/20 On-Nuch Rd, Prawet, Bangkok 10250, Thailand · +66 (02) 328 6721 · info@gyroinst.com</div>
+          <div style="margin-top:8px">You are receiving this email because you are a contact of Gyroscope Technology.</div>
+          <div style="margin-top:10px"><a href="#" style="color:#1A56DB;text-decoration:underline">Unsubscribe</a></div>
+        </div></td></tr></table>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
