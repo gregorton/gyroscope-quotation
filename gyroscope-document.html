@@ -16,17 +16,19 @@
      ============================================================ */
 
   :root {
-    /* Uniform near-black text across the whole page, set in Inter — a close,
-       cross-platform match to Apple's San Francisco. Size/weight create the
-       hierarchy; only the hyperlink stays blue. */
-    --navy: #1a1a1a;      /* headings, prices, title     */
-    --blue: #1A56DB;      /* hyperlinks (Click here)     */
-    --teal: #1a1a1a;      /* was accent — now black text */
-    --slate: #1a1a1a;     /* body text                   */
-    --muted: #333333;     /* labels (very slightly softer) */
-    --hairline: #E2E8F0;  /* rules / borders             */
-    --mist: #F5F7FA;      /* zebra / panel background    */
-    --ink: #1a1a1a;       /* body copy                   */
+    /* Three-step ink ramp on a navy/blue corporate axis, set in Inter — a close,
+       cross-platform match to Apple's San Francisco. Navy carries the structure
+       (headings, table head, values); blue is reserved for hyperlinks, the
+       quotation number and the grand total, so it stays an accent. Slate and
+       muted step the body copy and labels back. */
+    --navy: #0F2540;      /* headings, doc title, table head, grand total, values */
+    --blue: #0B57C7;      /* hyperlinks + quotation number + grand total value    */
+    --teal: #0F2540;      /* legacy var — repointed to navy (disc, alt-label, apply, focus) */
+    --slate: #3A4553;     /* secondary body text         */
+    --muted: #5A6674;     /* field labels                */
+    --hairline: #D8DEE7;  /* rules / borders             */
+    --mist: #F4F6F9;      /* spec-box / panel background */
+    --ink: #1F2733;       /* body copy                   */
 
     /* Inter — an open typeface designed as a close match to Apple's San
        Francisco (SF Pro). It's loaded as a web font (Google Fonts, above), so
@@ -41,7 +43,7 @@
   html, body {
     margin: 0;
     padding: 0;
-    background: #eef1f4;
+    background: #E8ECF2;
     color: var(--ink);
     font-family: var(--brand-font);
     font-size: 14px;
@@ -61,7 +63,7 @@
     background: #fff;
     padding: 11mm 14mm 9mm;
     position: relative;
-    box-shadow: 0 10px 40px rgba(10, 37, 64, 0.14);
+    box-shadow: 0 8px 32px rgba(15, 37, 64, 0.10);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -71,13 +73,13 @@
   .sheet::before {
     content: "";
     position: absolute;
-    right: -60mm;
-    top: 70mm;
+    right: -70mm;
+    top: 95mm;
     width: 180mm;
     height: 180mm;
     background:
-      radial-gradient(circle at center, rgba(14,116,144,0.05) 0 42%, transparent 43%),
-      repeating-radial-gradient(circle at center, transparent 0 26mm, rgba(14,116,144,0.05) 26mm 26.4mm);
+      radial-gradient(circle at center, rgba(15,37,64,0.035) 0 42%, transparent 43%),
+      repeating-radial-gradient(circle at center, transparent 0 26mm, rgba(15,37,64,0.035) 26mm 26.4mm);
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -91,8 +93,10 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: 24px;
-    /* Subtle blue header band that bleeds to the sheet edges */
-    background: #F5F8FD;
+    /* Subtle blue header band that bleeds to the sheet edges, closed off with a
+       blue rule so it reads as an intentional masthead rather than a grey wash */
+    background: #F7F9FC;
+    border-bottom: 2px solid var(--blue);
     margin: -11mm -14mm 0;
     padding: 11mm 14mm 10mm;
   }
@@ -192,28 +196,30 @@
   table.items {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 5px;
+    margin-top: 4px;
     font-size: 13px;
   }
   table.items thead th {
     text-align: left;
     color: var(--navy);
     font-weight: 700;
-    border-bottom: 1.5px solid var(--navy);
-    padding: 5px 6px 3px;
+    border-bottom: 1px solid var(--navy);
+    padding: 4px 6px 3px;
     vertical-align: bottom;
-    font-size: 12px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
   table.items thead th.num { text-align: right; }
   table.items thead .cur {
     display: block;
     font-weight: 600;
-    color: var(--blue);
+    color: var(--muted);
     font-size: 11px;
   }
 
   .grp { border-bottom: 0.5px solid var(--hairline); position: relative; }
-  .grp > td { padding: 5px 6px; vertical-align: top; }
+  .grp > td { padding: 3px 6px 5px; vertical-align: top; }
   td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   /* Prices use the original brand font */
@@ -224,21 +230,22 @@
   .item-no { font-weight: 700; color: var(--navy); }
   .part { font-weight: 700; color: var(--navy); }
   .var { color: var(--muted); padding-left: 10px; font-weight: 500; }
-  .desc-title { font-weight: 700; color: #1a1a1a; margin-top: 1px; font-size: 13px; line-height: 1.4; }
-  .desc { color: #1a1a1a; font-size: 13px; line-height: 1.4; }
-  .desc .em { font-weight: 700; color: #1a1a1a; }
-  .subline { color: #1a1a1a; font-size: 13px; line-height: 1.4; }
+  .desc-title { font-weight: 700; color: var(--navy); margin-top: 0; font-size: 13px; line-height: 1.32; }
+  .desc { color: var(--ink); font-size: 13px; line-height: 1.32; }
+  .desc .em { font-weight: 700; color: var(--navy); }
+  .subline { color: var(--ink); font-size: 13px; line-height: 1.32; }
   .disc { color: var(--teal); font-weight: 600; }
-  .total-strong { font-weight: 800; color: var(--blue); }
+  /* Per-line totals stay navy: the grand total is the only blue money on the page. */
+  .total-strong { font-weight: 700; color: var(--navy); }
 
   /* Two-column label/value spec block, like the CS reference */
   .spec-box {
-    margin: 5px 0 0;
-    padding: 5px 12px;
+    margin: 4px 0 0;
+    padding: 4px 12px;
     background: var(--mist);
     font-size: 12.5px;
     color: var(--slate);
-    line-height: 1.4;
+    line-height: 1.35;
   }
   .spec-box.empty { display: none; }
   .spec-row {
@@ -257,13 +264,13 @@
     color: var(--teal);
     font-size: 11.5px;
     text-decoration: underline;
-    padding: 6px 6px 0;
+    padding: 4px 6px 0;
   }
 
   .link { color: var(--blue); text-decoration: none; font-weight: 600; }
 
   /* ---- Per-item attachments: datasheet link + image ---- */
-  .attach { margin-top: 8px; }
+  .attach { margin-top: 4px; }
   /* Attachment display is anchored to the *row* (not the cell) and pinned from
      the row's right edge. This keeps image + "Download PDF" under the price
      columns regardless of how wide the description cell happens to be. */
@@ -295,7 +302,7 @@
     object-fit: contain;
   }
   .item-img.on { display: block; }
-  .att-editor { display: flex; gap: 7px; align-items: center; margin-top: 5px; }
+  .att-editor { display: flex; gap: 7px; align-items: center; margin-top: 3px; }
   .att-editor .att-label {
     font-size: 9.5px; font-weight: 700; color: var(--muted);
     width: 78px; flex: none;
@@ -305,23 +312,23 @@
     padding: 3px 8px; border: 1px solid var(--hairline); border-radius: 5px;
     width: 240px; background: #fff;
   }
-  .att-input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14,116,144,0.12); }
+  .att-input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(15,37,64,0.12); }
   .apply {
     font-family: inherit; cursor: pointer; font-size: 9.5px; font-weight: 700;
     letter-spacing: 0.03em; border: 0; border-radius: 999px;
     background: var(--teal); color: #fff; padding: 4px 12px;
   }
-  .apply:hover { background: #0b5e74; }
+  .apply:hover { background: #1B3A5C; }
 
   /* ============ TOTALS ============ */
-  .totals-wrap { display: flex; justify-content: flex-end; margin-top: 9px; }
+  .totals-wrap { display: flex; justify-content: flex-end; margin-top: 7px; }
   table.totals { width: 90mm; border-collapse: collapse; font-size: 12.5px; }
   table.totals td { padding: 3px 6px; }
   table.totals td.k { color: var(--slate); }
   table.totals td.v { text-align: right; font-variant-numeric: tabular-nums; color: var(--navy); }
   table.totals tr.rule td { border-top: 0.5px solid var(--hairline); }
   table.totals tr.grand td {
-    border-top: 1.5px solid var(--navy);
+    border-top: 1px solid var(--navy);
     font-weight: 800;
     font-size: 15.5px;
     color: var(--navy);
@@ -423,8 +430,8 @@
   /* ---- Editable fields: subtle affordance on screen, invisible in print ---- */
   [contenteditable="true"] { outline: none; border-radius: 2px; cursor: text; }
   @media screen {
-    [contenteditable="true"]:hover  { background: rgba(14,116,144,0.07); box-shadow: 0 0 0 3px rgba(14,116,144,0.07); }
-    [contenteditable="true"]:focus  { background: rgba(14,116,144,0.12); box-shadow: 0 0 0 3px rgba(14,116,144,0.12); }
+    [contenteditable="true"]:hover  { background: rgba(15,37,64,0.07); box-shadow: 0 0 0 3px rgba(15,37,64,0.07); }
+    [contenteditable="true"]:focus  { background: rgba(15,37,64,0.12); box-shadow: 0 0 0 3px rgba(15,37,64,0.12); }
   }
   /* Placeholder text for empty editable fields */
   [contenteditable][data-ph]:empty::before {
@@ -450,15 +457,39 @@
     width: 20px; height: 20px; font-size: 14px;
   }
   .add {
-    display: inline-block; margin-top: 6px;
+    display: inline-block; margin-top: 0;
     border: 1px dashed var(--hairline); background: #fff; color: var(--teal);
     font-size: 10px; font-weight: 700; letter-spacing: 0.03em;
-    padding: 3px 10px; border-radius: 999px;
+    padding: 2px 9px; border-radius: 999px; line-height: 1.3;
   }
-  .add:hover { border-color: var(--teal); background: rgba(14,116,144,0.06); }
+  .add:hover { border-color: var(--teal); background: rgba(15,37,64,0.06); }
   .add-item-wrap { margin-top: 8px; }
-  .subline-row { display: flex; align-items: baseline; gap: 4px; }
+  .subline-row { display: flex; align-items: baseline; gap: 4px; margin-top: 0; }
   .subline-row .subline { flex: 1; }
+
+  /* ---- Per-item editor chrome: collapsed until you work on the row ----
+     The "+ detail line" / "+ spec row" buttons and the two attachment editors
+     were always on screen, costing roughly 100px of dead height per line item.
+     They now materialise on hover / keyboard focus for the row in hand only.
+     All of it carries .no-print, so the export path strips it entirely. */
+  .item-tools { display: flex; gap: 6px; align-items: center; margin-top: 3px; }
+  .grp .item-tools,
+  .grp .attach .att-editor { display: none; }
+  .grp:hover .item-tools,
+  .grp:focus-within .item-tools { display: flex; }
+  .grp:hover .attach .att-editor,
+  .grp:focus-within .attach .att-editor { display: flex; }
+
+  /* .attach-out is absolutely positioned, so reserve height only when the row
+     actually carries an image / datasheet link — otherwise a collapsed row
+     would overlap the row beneath it. */
+  .grp:has(.item-img.on) .attach { min-height: 98px; }
+  .grp:has(.ds-link.on):not(:has(.item-img.on)) .attach { min-height: 20px; }
+
+  /* Zebra striping aids scanning of multi-item quotes; kept barely-there.
+     Declared before the hover affordance, at matching specificity, so hover wins. */
+  table.items tbody tr.grp:nth-of-type(even) > td { background: #FBFCFE; }
+  table.items tbody tr.grp:hover > td { background: #F7FAFC; }
 
   /* ---- Print pagination: fixed A4 pages built by the paginator ----
      #printRoot sits off-screen (measurable but invisible) until printing.
@@ -483,6 +514,8 @@
     html, body { background: #fff; }
     @page { size: A4; margin: 0; }   /* .page padding provides the margins */
     .no-print { display: none !important; }
+    /* The hover affordance is an editing cue only — never ink it. */
+    table.items tbody tr.grp:hover > td { background: none; }
 
     /* Paged mode (JS paginator ran): show the fixed pages, hide the sheet. */
     body.paged .toolbar,
@@ -800,9 +833,11 @@ function itemHTML(it = {}) {
         <div class="desc-title" ${ce('Product / item name')}>${it.titleHtml || ''}</div>
         <div class="desc" ${ce('Short description')}>${it.descHtml || ''}</div>
         <div class="sublist">${subs}</div>
-        <button type="button" class="add add-line no-print">+ detail line</button>
         <div class="spec-box${specs ? '' : ' empty'}">${specs}</div>
-        <button type="button" class="add add-spec no-print">+ spec row</button>
+        <div class="item-tools no-print">
+          <button type="button" class="add add-line no-print">+ detail line</button>
+          <button type="button" class="add add-spec no-print">+ spec row</button>
+        </div>
         <div class="attach">
           <div class="attach-out">
             <img class="item-img${it.image ? ' on' : ''}" ${it.image ? `src="${esc(it.image)}"` : ''} alt="" referrerpolicy="no-referrer">
