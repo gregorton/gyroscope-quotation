@@ -108,10 +108,14 @@
     min-width: 0;
   }
   .brand-logo {
+    /* Constrained by HEIGHT so any logo aspect ratio behaves: the current
+       circle-mark lockup is 1861x489 (≈3.81:1) where the previous wide
+       lockup was 1844x320 (≈5.76:1). Fixing the height keeps the header
+       band the same depth whichever asset is in place. */
     display: block;
-    width: 96mm;
-    max-width: 100%;
-    height: auto;
+    height: 18mm;
+    width: auto;
+    max-width: 96mm;
   }
 
   .company-contact {
@@ -558,7 +562,8 @@
 
   <span class="tb-group">
     <button class="ghost" onclick="exportData()" title="Download this document's data as a file you can import elsewhere">Export</button>
-    <button class="ghost" onclick="document.getElementById('importFile').click()" title="Load data from an exported file">Import</button>
+    <button class="ghost" onclick="exportAllData()" title="Download every saved document plus the current draft as one file — use this to move everything to another PC">Export All</button>
+    <button class="ghost" onclick="document.getElementById('importFile').click()" title="Load data from an exported file or a bundle">Import</button>
     <input type="file" id="importFile" accept="application/json,.json" hidden onchange="importData(this.files[0])">
     <button class="ghost" onclick="revertToOriginal()" title="Discard the working draft and reload the original (named saves are kept)">Revert</button>
   </span>
@@ -575,7 +580,10 @@
   <!-- ============ HEADER ============ -->
   <div class="top">
     <div class="brand-lockup">
-      <img class="brand-logo" src="https://gyroinst.com/gyroscope-technology-logo-gti-transparent-web.png" alt="Gyroscope Technology — A passion for precision" referrerpolicy="no-referrer">
+      <!-- normalizeHostedAssets() force-sets this src to GYRO_LOGO_URL on every
+           render, load-from-save and import, so documents saved with an older
+           logo URL silently upgrade to the current one. -->
+      <img class="brand-logo" src="https://gyroinst.com/gyroscope-technology-logo-gti-circle-thinner-dot-transparent-web.png" alt="Gyroscope Technology — A passion for precision" referrerpolicy="no-referrer">
     </div>
 
     <div class="company-contact">
@@ -729,7 +737,10 @@ function esc(s){
 }
 
 const GYRO_HOST = 'https://gyroinst.com';
-const GYRO_LOGO_URL = GYRO_HOST + '/gyroscope-technology-logo-gti-transparent-web.png';
+/* Current header logo. normalizeHostedAssets() force-sets .brand-logo's src to
+   this on every render / load-from-save / import, so a document saved with an
+   older logo URL silently upgrades the next time it is opened. */
+const GYRO_LOGO_URL = GYRO_HOST + '/gyroscope-technology-logo-gti-circle-thinner-dot-transparent-web.png';
 const GYRO_ASSET_ALIASES = Object.freeze({
   'hero-measurement-pi500.png': '/x_flow-meter.png',
   'hero-technical-ds500.png': '/x_chart-recorder.png',
@@ -738,6 +749,8 @@ const GYRO_ASSET_ALIASES = Object.freeze({
   'cs-instruments.png': '/partners/cs-instruments.png',
   'able-instruments.png': '/partners/able-instruments.png',
   'hoentzsch.png': '/partners/hoentzsch.png',
+  'gyroscope-technology-logo-gti-circle-thinner-dot-transparent-web.png': '/gyroscope-technology-logo-gti-circle-thinner-dot-transparent-web.png',
+  // Kept: the old lockup still exists on the site and other images may point at it.
   'gyroscope-technology-logo-gti-transparent-web.png': '/gyroscope-technology-logo-gti-transparent-web.png',
   'gti-mark.png': '/gti-mark.png?v=2',
   'x_flow-meter.png': '/x_flow-meter.png',
@@ -1037,9 +1050,13 @@ function setDoc(type) { DOC.docType = type; render(); saveWork(); }
    - Export/Import: move a document's data to another file or machine.
    ============================================================ */
 const itemsBodyEl = () => document.getElementById('itemsBody');
-const PATH      = location.pathname;
-const WORK_KEY  = 'gti_work_'  + PATH;   // refresh-safe working draft
-const SAVES_KEY = 'gti_saves_' + PATH;   // { id: { name, ts, html } }
+/* Storage keys are deliberately PATH-INDEPENDENT: earlier versions appended
+   location.pathname, so moving the file to another folder made every save
+   unreachable. migrateLegacyStorage() below adopts those older path-keyed
+   entries once, at boot. */
+const WORK_KEY  = 'gti_work_v2';         // refresh-safe working draft
+const SAVES_KEY = 'gti_saves_v2';        // { id: { name, ts, html } }
+const MIGRATED_KEY = 'gti_migrated_v2';  // marker so the scan runs only once
 let currentSaveId = null;                // which named save is loaded (if any)
 
 /* ---- small helpers ---- */
@@ -1101,6 +1118,67 @@ function loadWork() {
 /* ---- named saves ---- */
 function readSaves()  { try { return JSON.parse(localStorage.getItem(SAVES_KEY) || '{}'); } catch (e) { return {}; } }
 function writeSaves(o){ try { localStorage.setItem(SAVES_KEY, JSON.stringify(o)); } catch (e) {} }
+
+/**
+ * ONE-TIME adoption of saves written by older, path-keyed versions of this file
+ * (e.g. 'gti_saves_/C:/Users/greg/Desktop/templates/gyroscope-document.html').
+ * Legacy keys are NOT deleted — they stay as a safety net — and a marker key
+ * stops the scan re-running. Entirely wrapped in try/catch: a quota error or a
+ * malformed legacy blob must never stop the document from opening.
+ */
+function migrateLegacyStorage() {
+  try {
+    if (localStorage.getItem(MIGRATED_KEY)) return;
+
+    const saves = readSaves();
+    let adopted = 0;
+    const legacyWork = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key) continue;
+
+      if (key.indexOf('gti_saves_') === 0 && key !== SAVES_KEY) {
+        let blob = null;
+        try { blob = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { blob = null; }
+        if (!blob || typeof blob !== 'object') continue;
+        Object.keys(blob).forEach(id => {
+          const entry = blob[id];
+          if (!entry || typeof entry.html !== 'string') return;
+          if (saves[id]) return;                       // already present — re-running is harmless
+          saves[id] = { name: entry.name || 'Recovered document', ts: entry.ts || Date.now(), html: entry.html };
+          adopted++;
+        });
+      } else if (key.indexOf('gti_work_') === 0 && key !== WORK_KEY) {
+        legacyWork.push(key);
+      }
+    }
+
+    if (adopted) writeSaves(saves);
+
+    // Adopt a legacy working draft only when the new work slot is still empty.
+    if (!localStorage.getItem(WORK_KEY) && legacyWork.length) {
+      // No timestamp is stored with a working draft, so use the newest named
+      // save from the same path as a recency proxy; ties fall back to scan order.
+      let best = null;
+      let bestTs = -1;
+      legacyWork.forEach(key => {
+        const suffix = key.slice('gti_work_'.length);
+        let ts = 0;
+        try {
+          const sibling = JSON.parse(localStorage.getItem('gti_saves_' + suffix) || '{}');
+          Object.keys(sibling).forEach(id => { ts = Math.max(ts, Number(sibling[id]?.ts) || 0); });
+        } catch (e) {}
+        if (ts >= bestTs) { bestTs = ts; best = key; }
+      });
+      const html = best ? localStorage.getItem(best) : null;
+      if (html) localStorage.setItem(WORK_KEY, html);
+    }
+
+    localStorage.setItem(MIGRATED_KEY, new Date().toISOString());
+    if (adopted) flashStatus('Recovered ' + adopted + ' saved document' + (adopted === 1 ? '' : 's'));
+  } catch (e) { /* never block opening the document */ }
+}
 
 function refreshSaveDropdown() {
   const sel = document.getElementById('saveSelect');
@@ -1180,15 +1258,43 @@ function revertToOriginal() {
 /* ---- export / import (portable JSON) ---- */
 function exportData() {
   const name = (currentSaveId && readSaves()[currentSaveId]?.name) || docLabel();
-  const payload = { type: 'gyroscope-doc', version: 1, name, savedAt: new Date().toISOString(), html: sheetHTML() };
+  // Top-level `html` is kept at version 2 so an OLDER copy of this file, which
+  // only looks for a string `html` field, can still import this export.
+  const payload = { type: 'gyroscope-doc', version: 2, name, savedAt: new Date().toISOString(), html: sheetHTML() };
+  downloadJSON(payload, (name.replace(/[^\w.-]+/g, '_') || 'document') + '.gti.json');
+  flashStatus('Exported');
+}
+
+/**
+ * EXPORT ALL — every named save plus the current working draft in one bundle.
+ * localStorage never travels between machines, so this file is the only real
+ * way to move a whole document library to another PC.
+ */
+function exportAllData() {
+  const saves = readSaves();
+  const documents = Object.keys(saves)
+    .sort((a, b) => saves[b].ts - saves[a].ts)
+    .map(id => ({ name: saves[id].name, ts: saves[id].ts, html: saves[id].html }));
+  documents.unshift({ name: 'Working draft', ts: Date.now(), html: sheetHTML() });
+
+  const payload = {
+    type: 'gyroscope-doc-bundle',
+    version: 2,
+    savedAt: new Date().toISOString(),
+    documents,
+  };
+  downloadJSON(payload, 'gyroscope-documents.gti.json');
+  flashStatus('Exported ' + documents.length + ' document' + (documents.length === 1 ? '' : 's'));
+}
+
+function downloadJSON(payload, filename) {
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = (name.replace(/[^\w.-]+/g, '_') || 'document') + '.gti.json';
+  a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  flashStatus('Exported');
 }
 
 function importData(file) {
@@ -1197,7 +1303,32 @@ function importData(file) {
   reader.onload = () => {
     try {
       const data = JSON.parse(reader.result);
-      if (!data || typeof data.html !== 'string') throw new Error('bad file');
+      if (!data || typeof data !== 'object') throw new Error('bad file');
+
+      // Multi-document bundle (EXPORT ALL): restore every document as a named save.
+      if (Array.isArray(data.documents)) {
+        const docs = data.documents.filter(d => d && typeof d.html === 'string');
+        if (!docs.length) throw new Error('bad file');
+        const saves = readSaves();
+        let newest = null;
+        docs.forEach((d, i) => {
+          const id = uid() + i.toString(36);           // keep ids unique within the loop
+          const ts = Number(d.ts) || Date.now();
+          saves[id] = { name: d.name || 'Imported document', ts, html: d.html };
+          if (!newest || ts > saves[newest].ts) newest = id;
+        });
+        writeSaves(saves);
+        currentSaveId = newest;
+        setSheetHTML(saves[newest].html);             // load the most recent one
+        saveWork();
+        refreshSaveDropdown();
+        flashStatus('Imported ' + docs.length + ' document' + (docs.length === 1 ? '' : 's'));
+        return;
+      }
+
+      // Single document: v1, v2, or a bare { html } object — anything with a
+      // string `html` field is accepted, exactly as before.
+      if (typeof data.html !== 'string') throw new Error('bad file');
       setSheetHTML(data.html);
       const saves = readSaves();
       const id = uid();
@@ -1219,6 +1350,7 @@ function importData(file) {
 
 /* ---------------- boot ---------------- */
 render();
+migrateLegacyStorage();  // adopt saves from older path-keyed versions, once
 loadWork();          // restore refresh-safe working draft over the fresh render
 recompute();         // totals reflect the restored line items
 refreshSaveDropdown();
