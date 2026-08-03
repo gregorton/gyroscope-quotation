@@ -110,10 +110,14 @@
   .brand-logo {
     /* Constrained by HEIGHT so any logo aspect ratio behaves: the current
        circle-mark lockup is 1861x489 (≈3.81:1) where the previous wide
-       lockup was 1844x320 (≈5.76:1). Fixing the height keeps the header
-       band the same depth whichever asset is in place. */
+       lockup was 1844x320 (≈5.76:1). 24mm renders ≈91mm wide, which restores
+       the horizontal presence the old 96mm-wide lockup had. This costs no
+       header depth: .company-contact beside it runs ≈40mm tall, so the band
+       is sized by the contact block, not by the logo. 96mm max-width is a
+       guard for the ≈100mm of room left once the contact column takes its
+       76mm minimum plus the 24px flex gap. */
     display: block;
-    height: 18mm;
+    height: 24mm;
     width: auto;
     max-width: 96mm;
   }
