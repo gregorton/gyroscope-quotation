@@ -4,39 +4,38 @@ Guidance for coding agents working in this repository.
 
 ## Purpose
 
-Email campaign / quotation tooling for Gyroscope Technology:
-- Interactive email studio editor
-- Portable self-contained email HTML build
-- Quotation / document HTML
-- Campaign send helper
+Quotation / document tooling for Gyroscope Technology:
+- Quotation document HTML
+- Campaign send helper (optional)
 
 ## Read and edit these (source of truth)
 
 | Path | Role |
 |------|------|
-| `email-studio.js` | Email studio engine (main app logic) |
-| `email-advertisement.html` | Email ad editor shell (loads studio JS) |
-| `gyroscope-document.html` | Quotation / document HTML |
-| `build-portable.mjs` | Builds single-file portable email |
+| `gyroscope-document.html` | Quotation / document HTML — **primary file** |
 | `send-campaign.ps1` | PowerShell campaign send helper |
 | `recipients.txt` | Recipient list (one email per line; `#` comments) |
+| `email-studio.js` | Shared studio engine (only if still needed by other HTML) |
+| `build-portable.mjs` | Build helper (only if a portable build is requested) |
 
-Images used by the studio / brand:
+Brand images:
 - `gti-mark.png`
 - `gyroscope-technology-logo-gti-transparent-web.png`
 
-Prefer **`.js`**, **`.html`**, **`.mjs`**, and **`.ps1`** over everything else.
+Prefer **`gyroscope-document.html`**, then **`.js`** / **`.ps1`**. Do not invent new email-ad pages unless asked.
 
-## Generated — do not hand-edit
+## Deleted / do not recreate
 
-| Path | Notes |
-|------|--------|
-| `email-advertisement.portable.html` | Output of `node build-portable.mjs`. Regenerate after changing `email-studio.js` or `email-advertisement.html`. |
+These were removed from the repo. **Do not restore or recreate** unless the user explicitly asks:
+
+- `email-advertisement.html`
+- `email-advertisement.portable.html`
 
 ## Ignore (noise / junk)
 
 Do **not** open, edit, or base changes on:
 
+- Anything named `email-advertisement*` (removed; out of scope)
 - `New Text Document.txt` — scratch / leftover text
 - `templates - Shortcut.lnk` — Windows shortcut, not source
 - `.vscode/` — editor settings only
@@ -44,27 +43,15 @@ Do **not** open, edit, or base changes on:
 
 ## Workflow notes
 
-1. **Edit source, then rebuild portable** when changing the email ad:
-   ```bash
-   node build-portable.mjs
-   ```
-   Commit both source changes and the regenerated `email-advertisement.portable.html` when the portable build is part of the deliverable.
-
-2. **Keep changes scoped** to the files above. Do not invent new top-level apps or restructure the repo unless asked.
-
+1. **Default work** is on `gyroscope-document.html` (quotations / documents).
+2. **Keep changes scoped.** Do not rebuild an email-advertisement product unless asked.
 3. **Secrets / recipients**: treat `recipients.txt` and any SMTP/credentials in scripts as sensitive. Never commit real API keys or production mailing lists unless the user explicitly asks.
-
 4. **Default branch**: `main`.
 
 ## Quick orientation
 
 ```
-email-advertisement.html  →  loads  →  email-studio.js
-                                      ↓
-                         build-portable.mjs
-                                      ↓
-                    email-advertisement.portable.html  (standalone)
-
-gyroscope-document.html   →  separate document/quotation page
+gyroscope-document.html   →  quotation / document page (main focus)
 send-campaign.ps1         →  sends using recipients.txt
+email-studio.js           →  engine only if referenced; not an ad page
 ```
