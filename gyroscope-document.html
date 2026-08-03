@@ -484,11 +484,13 @@
   .grp:hover .attach .att-editor,
   .grp:focus-within .attach .att-editor { display: flex; }
 
-  /* .attach-out is absolutely positioned, so reserve height only when the row
-     actually carries an image / datasheet link — otherwise a collapsed row
-     would overlap the row beneath it. */
-  .grp:has(.item-img.on) .attach { min-height: 98px; }
-  .grp:has(.ds-link.on):not(:has(.item-img.on)) .attach { min-height: 20px; }
+  /* .attach-out is absolutely positioned, so the row must reserve its height or
+     the next row rides up underneath it. That reservation is MEASURED at runtime
+     by syncAttachReserve(), not guessed: a fixed 98px rule used to fire for any
+     row whose image merely carried a src attribute, leaving ~98px of dead space
+     under rows whose image never actually rendered (broken link, or a path that
+     resolved to nothing). Now a row reserves exactly what it draws. */
+  .attach { min-height: 0; }
 
   /* Zebra striping aids scanning of multi-item quotes; kept barely-there.
      Declared before the hover affordance, at matching specificity, so hover wins. */
@@ -1092,8 +1094,53 @@ function normalizeHostedAssets(root = sheetEl()) {
     }
   });
 }
-function sheetHTML(){ normalizeHostedAssets(); return sheetEl().innerHTML; }
-function setSheetHTML(html) { sheetEl().innerHTML = html; normalizeHostedAssets(); recompute(); }
+/* ---- attachment height reservation ----
+   .attach-out (thumbnail + "Download PDF") is absolutely positioned against the
+   row, so it contributes no height of its own and the following row would ride
+   up underneath it. Reserve the height it ACTUALLY renders at, measured from the
+   live box: an image that failed to load, or a row carrying only the PDF link,
+   reserves next to nothing instead of a fixed ~98px of dead space. */
+function syncAttachReserve(wrap) {
+  if (!wrap || !wrap.querySelector) return;
+  const out = wrap.querySelector('.attach-out');
+  if (!out) return;
+  wrap.style.minHeight = '0px';               // collapse first, then measure
+  const h = Math.ceil(out.getBoundingClientRect().height);
+  if (h > 0) wrap.style.minHeight = h + 'px';
+  else clearAttachReserve(wrap);
+}
+function clearAttachReserve(wrap) {
+  wrap.style.removeProperty('min-height');
+  if (!wrap.getAttribute('style')) wrap.removeAttribute('style');
+}
+function syncAllAttachReserves(root) {
+  const scope = root || sheetEl();
+  if (!scope) return;
+  scope.querySelectorAll('.attach').forEach(syncAttachReserve);
+}
+
+/* Images resolve asynchronously, so a measurement taken at render time can read
+   zero. load/error don't bubble — listen in the capture phase and re-measure. */
+['load', 'error'].forEach(evt => {
+  document.addEventListener(evt, (e) => {
+    const img = e.target;
+    if (img && img.classList && img.classList.contains('item-img')) {
+      syncAttachReserve(img.closest('.attach'));
+    }
+  }, true);
+});
+
+function sheetHTML(){
+  normalizeHostedAssets();
+  /* The measured reservation is a runtime artefact — strip it so it is never
+     baked into saved / exported HTML, then restore it for the live view. */
+  const el = sheetEl();
+  el.querySelectorAll('.attach').forEach(clearAttachReserve);
+  const html = el.innerHTML;
+  syncAllAttachReserves(el);
+  return html;
+}
+function setSheetHTML(html) { sheetEl().innerHTML = html; normalizeHostedAssets(); recompute(); syncAllAttachReserves(); }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 function docLabel() {
   return (document.querySelector('#docTitle .num')?.textContent || '').trim() || 'Document';
@@ -1353,6 +1400,7 @@ render();
 migrateLegacyStorage();  // adopt saves from older path-keyed versions, once
 loadWork();          // restore refresh-safe working draft over the fresh render
 recompute();         // totals reflect the restored line items
+syncAllAttachReserves();  // reserve exactly the height each attachment draws
 refreshSaveDropdown();
 
 /* ---------------- add / remove interactions ---------------- */
@@ -1437,6 +1485,7 @@ document.addEventListener('click', (e) => {
       link.removeAttribute('href');
       link.classList.remove('on');
     }
+    syncAttachReserve(wrap);
     return;
   }
   // Apply an image link -> shows a thumbnail (prints, editor doesn't)
@@ -1448,6 +1497,7 @@ document.addEventListener('click', (e) => {
     const img = wrap.querySelector('.item-img');
     if (src) { img.setAttribute('src', src); img.classList.add('on'); }
     else { img.removeAttribute('src'); img.classList.remove('on'); }
+    syncAttachReserve(wrap);   // re-measured again on the image's load/error
     return;
   }
 });
